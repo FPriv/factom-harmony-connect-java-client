@@ -10,35 +10,133 @@
  * Do not edit the class manually.
  */
 
-
 package harmony_connect_client.api;
 
+import harmony_connect_client.*;
+import harmony_connect_client.auth.*;
+import harmony_connect_client.model.*;
 import harmony_connect_client.ApiException;
+import harmony_connect_client.model.Chain;
+import harmony_connect_client.model.ChainCreate;
+import harmony_connect_client.model.ChainList;
+import harmony_connect_client.model.ChainShort;
 import harmony_connect_client.model.Entry;
 import harmony_connect_client.model.EntryCreate;
 import harmony_connect_client.model.EntryList;
 import harmony_connect_client.model.EntrySearchResponse;
 import harmony_connect_client.model.EntryShort;
 import harmony_connect_client.model.SearchBody;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Ignore;
-
+import org.junit.BeforeClass;
+import org.junit.Assert;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * API tests for EntriesApi
  */
-@Ignore
 public class EntriesApiTest {
+    static EntriesApi api;
+    static String testChainId;
+    static String testEntryHash;
+    static String secondTestEntryHash;
+    String timeNonce = Base64.getEncoder().encodeToString((System.currentTimeMillis()+"").getBytes());
+    String testExtId = "ZXhhbXBsZS1leHRpZA==";
 
-    private final EntriesApi api = new EntriesApi();
+    private static class SetUpResults {
+        String testChainId;
+        String testEntryHash;
+        ChainsApi chainsApi;
+        EntriesApi entriesApi;
+    }
 
-    
+    @BeforeClass
+    public static void setUp() {
+        EntriesApiTest obj = new EntriesApiTest();
+        SetUpResults setupResults = obj.setUpHelper();
+        api = setupResults.entriesApi;
+        testChainId = setupResults.testChainId;
+        testEntryHash = setupResults.testEntryHash;
+    }
+
+    public SetUpResults setUpHelper() {
+        InputStream inputStream = null;
+        String baseurl;
+        String appid;
+        String appkey;
+        EntriesApi newEntriesApi = null;
+        ChainsApi newChainsApi = null;
+        String newTestChainId = "";
+        String newTestEntryHash = "";
+
+		try {
+			Properties prop = new Properties();
+
+			inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
+			if (inputStream != null) {
+				prop.load(inputStream);
+			} else {
+				throw new FileNotFoundException("config.properties file not found in the classpath");
+			}
+
+			baseurl = prop.getProperty("baseurl");
+			appid = prop.getProperty("appid");
+            appkey = prop.getProperty("appkey");
+
+            ApiClient defaultClient = Configuration.getDefaultApiClient();
+            defaultClient.setBasePath(baseurl);
+            ApiKeyAuth AppId = (ApiKeyAuth) defaultClient.getAuthentication("AppId");
+            AppId.setApiKey(appid);
+            ApiKeyAuth AppKey = (ApiKeyAuth) defaultClient.getAuthentication("AppKey");
+            AppKey.setApiKey(appkey);
+            newEntriesApi = new EntriesApi();
+            newChainsApi = new ChainsApi();
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		} finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Exception: " + e);
+            }
+        }
+
+        ChainCreate chainCreate = new ChainCreate();
+        List<String> externalIds = Arrays.asList(testExtId, timeNonce);
+        String content = "ZXhhbXBsZS1jb250ZW50";
+        chainCreate.externalIds(externalIds);
+        chainCreate.content(content);
+        try {
+            ChainShort response = newChainsApi.postChain(chainCreate);
+            newTestChainId = response.getChainId();
+            newTestEntryHash = response.getEntryHash();
+            assertFalse(newTestChainId.isEmpty());
+        } catch (Exception e) {
+			System.out.println("Exception: " + e);
+        }
+
+        SetUpResults result = new SetUpResults();
+        result.entriesApi = newEntriesApi;
+        result.chainsApi = newChainsApi;
+        result.testChainId = newTestChainId;
+        result.testEntryHash = newTestEntryHash;
+        return result;
+    }
+
     /**
-     * Get Chain&#39;s Entries
+     * Get Chain's Entries
      *
      * List all entries contained on the specified chain.
      *
@@ -47,13 +145,18 @@ public class EntriesApiTest {
      */
     @Test
     public void getEntriesByChainIDTest() throws ApiException {
-        String chainId = null;
-        Integer limit = null;
-        Integer offset = null;
-        String stages = null;
-        EntryList response = api.getEntriesByChainID(chainId, limit, offset, stages);
+        EntryList response = api.getEntriesByChainID(testChainId, 10, 0, "replicated");
 
-        // TODO: test validations
+        assertFalse(response.toString().isEmpty());
+
+        Boolean foundTestEntry = false;
+
+        for (EntryListData dataItem : response.getData()) {
+            if (dataItem.getEntryHash().equals(testEntryHash)) {
+                foundTestEntry = true;
+            }
+        }
+        assertTrue(foundTestEntry);
     }
     
     /**
@@ -66,15 +169,14 @@ public class EntriesApiTest {
      */
     @Test
     public void getEntryByHashTest() throws ApiException {
-        String chainId = null;
-        String entryHash = null;
-        Entry response = api.getEntryByHash(chainId, entryHash);
+        Entry response = api.getEntryByHash(testChainId, testEntryHash);
 
-        // TODO: test validations
+        assertFalse(response.toString().isEmpty());
+        assertEquals("entry hash should match", testEntryHash, response.getData().getEntryHash());
     }
     
     /**
-     * Get Chain&#39;s First Entry
+     * Get Chain's First Entry
      *
      * Retrieve the first entry that has been saved to this chain.
      *
@@ -83,14 +185,14 @@ public class EntriesApiTest {
      */
     @Test
     public void getFirstEntryTest() throws ApiException {
-        String chainId = null;
-        Entry response = api.getFirstEntry(chainId);
+        Entry response = api.getFirstEntry(testChainId);
 
-        // TODO: test validations
+        assertFalse(response.toString().isEmpty());
+        assertEquals("entry hash should match", testEntryHash, response.getData().getEntryHash());
     }
     
     /**
-     * Get Chain&#39;s Last Entry
+     * Get Chain's Last Entry
      *
      * Retrieve the last entry that has been saved to this chain.
      *
@@ -99,14 +201,16 @@ public class EntriesApiTest {
      */
     @Test
     public void getLastEntryTest() throws ApiException {
-        String chainId = null;
-        Entry response = api.getLastEntry(chainId);
+        Entry response = api.getLastEntry(testChainId);
 
-        // TODO: test validations
+        assertFalse(response.toString().isEmpty());
+        if (!response.getData().getEntryHash().equals(testEntryHash)) {
+            assertEquals("entry hash should match", secondTestEntryHash, response.getData().getEntryHash());
+        }
     }
     
     /**
-     * Search Chain&#39;s Entries
+     * Search Chain's Entries
      *
      * Find all of the entries within the specified chain that have the requested &#x60;external_ids&#x60;.
      *
@@ -115,13 +219,12 @@ public class EntriesApiTest {
      */
     @Test
     public void postEntriesSearchTest() throws ApiException {
-        String chainId = null;
-        SearchBody searchBody = null;
-        Integer limit = null;
-        Integer offset = null;
-        EntrySearchResponse response = api.postEntriesSearch(chainId, searchBody, limit, offset);
+        SearchBody searchBody = new SearchBody();
+        searchBody.addExternalIdsItem(testExtId);
+        EntrySearchResponse response = api.postEntriesSearch(testChainId, searchBody, 10, 0);
 
-        // TODO: test validations
+        assertFalse(response.toString().isEmpty());
+        assertTrue(response.getData().size() > 0);
     }
     
     /**
@@ -134,11 +237,13 @@ public class EntriesApiTest {
      */
     @Test
     public void postEntryToChainIDTest() throws ApiException {
-        String chainId = null;
-        EntryCreate entryCreate = null;
-        EntryShort response = api.postEntryToChainID(chainId, entryCreate);
+        EntryCreate entryCreate = new EntryCreate();
+        entryCreate.addExternalIdsItem("c2Vjb25kLWVudHJ5");
+        entryCreate.content("c2Vjb25kLWVudHJ5LWNvbnRlbnQ=");
+        EntryShort response = api.postEntryToChainID(testChainId, entryCreate);
 
-        // TODO: test validations
+        assertFalse(response.toString().isEmpty());
+        secondTestEntryHash = response.getEntryHash();
     }
     
 }

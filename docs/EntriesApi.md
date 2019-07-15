@@ -1,14 +1,14 @@
 # EntriesApi
 
-All URIs are relative to *https://connect-shared-sandbox-2445582615332.production.gw.apicast.io/v1*
+All URIs are relative to *https://ephemeral.api.factom.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getEntriesByChainID**](EntriesApi.md#getEntriesByChainID) | **GET** /chains/{chain_id}/entries | Get Chain&#39;s Entries
+[**getEntriesByChainID**](EntriesApi.md#getEntriesByChainID) | **GET** /chains/{chain_id}/entries | Get Chain's Entries
 [**getEntryByHash**](EntriesApi.md#getEntryByHash) | **GET** /chains/{chain_id}/entries/{entry_hash} | Get Entry Info
-[**getFirstEntry**](EntriesApi.md#getFirstEntry) | **GET** /chains/{chain_id}/entries/first | Get Chain&#39;s First Entry
-[**getLastEntry**](EntriesApi.md#getLastEntry) | **GET** /chains/{chain_id}/entries/last | Get Chain&#39;s Last Entry
-[**postEntriesSearch**](EntriesApi.md#postEntriesSearch) | **POST** /chains/{chain_id}/entries/search | Search Chain&#39;s Entries
+[**getFirstEntry**](EntriesApi.md#getFirstEntry) | **GET** /chains/{chain_id}/entries/first | Get Chain's First Entry
+[**getLastEntry**](EntriesApi.md#getLastEntry) | **GET** /chains/{chain_id}/entries/last | Get Chain's Last Entry
+[**postEntriesSearch**](EntriesApi.md#postEntriesSearch) | **POST** /chains/{chain_id}/entries/search | Search Chain's Entries
 [**postEntryToChainID**](EntriesApi.md#postEntryToChainID) | **POST** /chains/{chain_id}/entries | Create an Entry
 
 
@@ -16,7 +16,7 @@ Method | HTTP request | Description
 # **getEntriesByChainID**
 > EntryList getEntriesByChainID(chainId, limit, offset, stages)
 
-Get Chain&#39;s Entries
+Get Chain's Entries
 
 List all entries contained on the specified chain.
 
@@ -63,8 +63,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chainId** | **String**| Chain identifier |
  **limit** | **Integer**| The number of items you would like back in each page. | [optional]
- **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you&#39;ve already seen the first 15 items and you&#39;d like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
- **stages** | **String**| The immutability stages you want to restrict results to. You can choose any from &#x60;replicated&#x60;, &#x60;factom&#x60;, and &#x60;anchored&#x60;. If you would like to search among multiple stages, send them in a comma separated string. For example: &#x60;&#39;replicated,factom&#39;&#x60;. | [optional]
+ **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you've already seen the first 15 items and you'd like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
+ **stages** | **String**| The immutability stages you want to restrict results to. You can choose any from &#x60;replicated&#x60;, &#x60;factom&#x60;, and &#x60;anchored&#x60;. If you would like to search among multiple stages, send them in a comma separated string. For example: &#x60;'replicated,factom'&#x60;. | [optional]
 
 ### Return type
 
@@ -112,7 +112,7 @@ AppKey.setApiKey("YOUR API KEY");
 
 EntriesApi apiInstance = new EntriesApi();
 String chainId = 285904; // String | Chain identifier
-String entryHash = db; // String | The SHA256 hash of the entry.
+String entryHash = db; // String | The unique identitfier of the entry.
 try {
     Entry result = apiInstance.getEntryByHash(chainId, entryHash);
     System.out.println(result);
@@ -127,7 +127,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chainId** | **String**| Chain identifier |
- **entryHash** | **String**| The SHA256 hash of the entry. |
+ **entryHash** | **String**| The unique identitfier of the entry. |
 
 ### Return type
 
@@ -146,7 +146,7 @@ Name | Type | Description  | Notes
 # **getFirstEntry**
 > Entry getFirstEntry(chainId)
 
-Get Chain&#39;s First Entry
+Get Chain's First Entry
 
 Retrieve the first entry that has been saved to this chain.
 
@@ -207,7 +207,7 @@ Name | Type | Description  | Notes
 # **getLastEntry**
 > Entry getLastEntry(chainId)
 
-Get Chain&#39;s Last Entry
+Get Chain's Last Entry
 
 Retrieve the last entry that has been saved to this chain.
 
@@ -268,7 +268,7 @@ Name | Type | Description  | Notes
 # **postEntriesSearch**
 > EntrySearchResponse postEntriesSearch(chainId, searchBody, limit, offset)
 
-Search Chain&#39;s Entries
+Search Chain's Entries
 
 Find all of the entries within the specified chain that have the requested &#x60;external_ids&#x60;.
 
@@ -316,7 +316,7 @@ Name | Type | Description  | Notes
  **chainId** | **String**| Chain identifier |
  **searchBody** | [**SearchBody**](SearchBody.md)|  |
  **limit** | **Integer**| The number of items you would like back in each page. | [optional]
- **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you&#39;ve already seen the first 15 items and you&#39;d like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
+ **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you've already seen the first 15 items and you'd like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
 
 ### Return type
 
