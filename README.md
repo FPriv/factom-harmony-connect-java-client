@@ -99,6 +99,9 @@ public class ChainsApiExample {
         // Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
         //AppKey.setApiKeyPrefix("Token");
 
+        // Configure base path. Default is https://ephemeral.api.factom.com/v1
+        defaultClient.setBasePath("YOUR BASE PATH");
+
         ChainsApi apiInstance = new ChainsApi();
         String chainId = "6a6d796c77cc5654bb8600e9cb36e94c7767a7bb99d6abcfb0ab54b8187c7df8"; // String | Chain identifier
         try {
@@ -257,10 +260,22 @@ Authentication schemes defined for the API:
 - **Location**: HTTP header
 
 
+## Documentation for Changing the BasePath
+
+When you move to a public or private blockchain plan, you'll need to update your basepath to match your new API address. You can see your current API basepath on the Application Details page [in your Harmony Dev portal.](https://account.factom.com/admin/applications).
+
+```java
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+defaultClient.setBasePath("YOUR BASE PATH");
+```
+
 ## Recommendation
 
 It's recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issues.
 
-## Author
+## Support
+
+For more information, you can view the Connect documentation at [https://docs.harmony.factom.com](https://docs.harmony.factom.com)
 
 For additional support, contact us at harmony-support@factom.com
