@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**version** | **String** | Connect version | 
+**version** | **String** | Current version of the Connect API | 
 **links** | [**AllInfoLinks**](AllInfoLinks.md) |  | 
 
 

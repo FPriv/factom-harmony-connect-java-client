@@ -10,28 +10,74 @@
  * Do not edit the class manually.
  */
 
-
 package harmony_connect_client.api;
 
+import harmony_connect_client.*;
+import harmony_connect_client.auth.*;
+import harmony_connect_client.model.*;
 import harmony_connect_client.ApiException;
 import harmony_connect_client.model.AllInfo;
+import static org.junit.Assert.*;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Ignore;
-
+import org.junit.Before;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * API tests for InfoApi
  */
-@Ignore
 public class InfoApiTest {
+    private InfoApi api;
 
-    private final InfoApi api = new InfoApi();
+    @Before
+    public void setUp() {
+        InputStream inputStream = null;
+        String baseurl;
+        String appid;
+        String appkey;
 
-    
+		try {
+			Properties prop = new Properties();
+
+			inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
+			if (inputStream != null) {
+				prop.load(inputStream);
+			} else {
+				throw new FileNotFoundException("config.properties file not found in the classpath");
+			}
+
+			baseurl = prop.getProperty("baseurl");
+			appid = prop.getProperty("appid");
+            appkey = prop.getProperty("appkey");
+
+            ApiClient defaultClient = Configuration.getDefaultApiClient();
+            defaultClient.setBasePath(baseurl);
+            ApiKeyAuth AppId = (ApiKeyAuth) defaultClient.getAuthentication("AppId");
+            AppId.setApiKey(appid);
+            ApiKeyAuth AppKey = (ApiKeyAuth) defaultClient.getAuthentication("AppKey");
+            AppKey.setApiKey(appkey);
+            api = new InfoApi();
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		} finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Exception: " + e);
+            }
+        }
+    }
+
     /**
      * API Info
      *
@@ -43,8 +89,7 @@ public class InfoApiTest {
     @Test
     public void getApiInfoTest() throws ApiException {
         AllInfo response = api.getApiInfo();
-
-        // TODO: test validations
+        assertFalse(response.getVersion().isEmpty());
+        assertFalse(response.getLinks().toString().isEmpty());
     }
-    
 }

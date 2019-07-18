@@ -1,6 +1,6 @@
 # ChainsApi
 
-All URIs are relative to *https://connect-shared-sandbox-2445582615332.production.gw.apicast.io/v1*
+All URIs are relative to *https://ephemeral.api.factom.com/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -120,8 +120,8 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **limit** | **Integer**| The number of items you would like back in each page. | [optional]
- **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you&#39;ve already seen the first 15 items and you&#39;d like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
- **stages** | **String**| The immutability stages you want to restrict results to. You can choose any from &#x60;replicated&#x60;, &#x60;factom&#x60;, and &#x60;anchored&#x60;. If you would like to search among multiple stages, send them in a comma separated string. For example: &#x60;&#39;replicated,factom&#39;&#x60;. | [optional]
+ **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you've already seen the first 15 items and you'd like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
+ **stages** | **String**| The immutability stages you want to restrict results to. You can choose any from &#x60;replicated&#x60;, &#x60;factom&#x60;, and &#x60;anchored&#x60;. If you would like to search among multiple stages, send them in a comma separated string. For example: &#x60;'replicated,factom'&#x60;. | [optional]
 
 ### Return type
 
@@ -203,7 +203,7 @@ Name | Type | Description  | Notes
 
 Search Chains
 
-Finds all of the chains with &#x60;external_ids&#x60; that match what you&#39;ve entered. External IDs must be sent in Base64 format.
+Finds all of the chains with &#x60;external_ids&#x60; that match what you've entered. External IDs must be sent in Base64 format.
 
 ### Example
 ```java
@@ -247,7 +247,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **searchBody** | [**SearchBody**](SearchBody.md)|  |
  **limit** | **Integer**| The number of items you would like back in each page. | [optional]
- **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you&#39;ve already seen the first 15 items and you&#39;d like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
+ **offset** | **Integer**| The offset parameter allows you to select which item you would like to start from when you get back a list from Connect. For example, if you've already seen the first 15 items and you'd like the next set, you would send an offset of 15. &#x60;offset&#x3D;0&#x60; starts from the first item of the set and is the default position. | [optional]
 
 ### Return type
 
