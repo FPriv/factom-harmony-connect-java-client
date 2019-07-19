@@ -10,31 +10,114 @@
  * Do not edit the class manually.
  */
 
-
 package harmony_connect_client.api;
 
+import harmony_connect_client.*;
+import harmony_connect_client.auth.*;
+import harmony_connect_client.model.*;
 import harmony_connect_client.ApiException;
 import harmony_connect_client.model.Chain;
 import harmony_connect_client.model.ChainCreate;
 import harmony_connect_client.model.ChainList;
 import harmony_connect_client.model.ChainShort;
 import harmony_connect_client.model.SearchBody;
+import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Ignore;
-
+import org.junit.BeforeClass;
+import org.junit.Assert;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * API tests for ChainsApi
- */
-@Ignore
+*/
 public class ChainsApiTest {
+    static ChainsApi api;
+    static String testChainId;
+    String timeNonce = Base64.getEncoder().encodeToString((System.currentTimeMillis()+"").getBytes());
+    String testExtId = "ZXhhbXBsZS1leHRpZA==";
 
-    private final ChainsApi api = new ChainsApi();
+    private static class SetUpResults {
+        String testChainId;
+        ChainsApi api;
+    }
 
+    @BeforeClass
+    public static void setUp() {
+        ChainsApiTest obj = new ChainsApiTest();
+        SetUpResults setupResults = obj.setUpHelper();
+        api = setupResults.api;
+        testChainId = setupResults.testChainId;
+    }
+
+    public SetUpResults setUpHelper() {
+        InputStream inputStream = null;
+        String baseurl;
+        String appid;
+        String appkey;
+        ChainsApi newApi = null;
+        String newTestChainId = "";
+
+		try {
+			Properties prop = new Properties();
+
+			inputStream = getClass().getClassLoader().getResourceAsStream("config.properties");
+			if (inputStream != null) {
+				prop.load(inputStream);
+			} else {
+				throw new FileNotFoundException("config.properties file not found in the classpath");
+			}
+
+			baseurl = prop.getProperty("baseurl");
+			appid = prop.getProperty("appid");
+            appkey = prop.getProperty("appkey");
+
+            ApiClient defaultClient = Configuration.getDefaultApiClient();
+            defaultClient.setBasePath(baseurl);
+            ApiKeyAuth AppId = (ApiKeyAuth) defaultClient.getAuthentication("AppId");
+            AppId.setApiKey(appid);
+            ApiKeyAuth AppKey = (ApiKeyAuth) defaultClient.getAuthentication("AppKey");
+            AppKey.setApiKey(appkey);
+            newApi = new ChainsApi();
+		} catch (Exception e) {
+			System.out.println("Exception: " + e);
+		} finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Exception: " + e);
+            }
+        }
+
+        ChainCreate chainCreate = new ChainCreate();
+        List<String> externalIds = Arrays.asList(testExtId, timeNonce);
+        String content = "ZXhhbXBsZS1jb250ZW50";
+        chainCreate.externalIds(externalIds);
+        chainCreate.content(content);
+        try {
+            ChainShort response = newApi.postChain(chainCreate);
+            newTestChainId = response.getChainId();
+            assertFalse(newTestChainId.isEmpty());
+        } catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
+
+        SetUpResults result = new SetUpResults();
+        result.api = newApi;
+        result.testChainId = newTestChainId;
+        return result;
+    }
     
     /**
      * Get Chain Info
@@ -46,10 +129,9 @@ public class ChainsApiTest {
      */
     @Test
     public void getChainByIDTest() throws ApiException {
-        String chainId = null;
-        Chain response = api.getChainByID(chainId);
-
-        // TODO: test validations
+        Chain response = api.getChainByID(testChainId);
+        assertFalse(response.getData().getContent().isEmpty());
+        assertEquals("testChain should have expected content", "ZXhhbXBsZS1jb250ZW50", response.getData().getContent());
     }
     
     /**
@@ -62,12 +144,20 @@ public class ChainsApiTest {
      */
     @Test
     public void getChainsTest() throws ApiException {
-        Integer limit = null;
-        Integer offset = null;
-        String stages = null;
-        ChainList response = api.getChains(limit, offset, stages);
+        Integer limit = 10;
+        Integer offset = 0;
+        ChainList factomStageResponse = api.getChains(limit, offset, "factom");
+        assertEquals("getChains should have at least 10 `factom` stage elements", 10, factomStageResponse.getData().size());
 
-        // TODO: test validations
+        ChainList replicatedStageResponse = api.getChains(limit, offset, "replicated");
+        Boolean foundTestChain = false;
+
+        for (ChainListData dataItem : replicatedStageResponse.getData()) {
+            if (dataItem.getChainId().equals(testChainId)) {
+                foundTestChain = true;
+            }
+        }
+        assertEquals("testChainId should be in the most recent replicated chains response", true, foundTestChain);
     }
     
     /**
@@ -80,28 +170,41 @@ public class ChainsApiTest {
      */
     @Test
     public void postChainTest() throws ApiException {
-        ChainCreate chainCreate = null;
+        ChainCreate chainCreate = new ChainCreate();
+        List<String> externalIds = Arrays.asList(testExtId, timeNonce);
+        String content = "ZXhhbXBsZS1jb250ZW50";
+        chainCreate.externalIds(externalIds);
+        chainCreate.content(content);
         ChainShort response = api.postChain(chainCreate);
-
-        // TODO: test validations
+        String throwawayTestChainId = response.getChainId();
+        assertFalse(throwawayTestChainId.isEmpty());
     }
     
     /**
      * Search Chains
      *
-     * Finds all of the chains with &#x60;external_ids&#x60; that match what you&#39;ve entered. External IDs must be sent in Base64 format.
+     * Finds all of the chains with &#x60;external_ids&#x60; that match what you've entered. External IDs must be sent in Base64 format.
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void postChainSearchTest() throws ApiException {
-        SearchBody searchBody = null;
-        Integer limit = null;
-        Integer offset = null;
+        SearchBody searchBody = new SearchBody();
+        searchBody.addExternalIdsItem(testExtId);
+        Integer limit = 10;
+        Integer offset = 0;
         ChainList response = api.postChainSearch(searchBody, limit, offset);
+        Boolean foundTestExtId = false;
 
-        // TODO: test validations
+        for (ChainListData dataItem : response.getData()) {
+            for (String eid : dataItem.getExternalIds()) {
+                if (eid.equals(testExtId)) {
+                    foundTestExtId = true;
+                }
+            }
+        }
+        assertEquals("test ext_id should be in the postChainSearchTest response(s)", true, foundTestExtId);
     }
     
 }
