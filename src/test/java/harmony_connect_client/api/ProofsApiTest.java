@@ -20,7 +20,7 @@ import harmony_connect_client.model.*;
 import harmony_connect_client.ApiException;
 import harmony_connect_client.model.AnchorLong;
 import harmony_connect_client.model.ErrorMessage;
-import harmony_connect_client.model.InlineResponse200;
+import harmony_connect_client.model.SearchResult;
 import harmony_connect_client.model.ReceiptLong;
 import harmony_connect_client.model.Chain;
 import harmony_connect_client.model.ChainCreate;
@@ -185,7 +185,7 @@ public class ProofsApiTest {
      */
     @Test
     public void getSearchTest() throws ApiException {
-        InlineResponse200 response = api.getSearch(testEntryHash, "factom");
+        SearchResult response = api.getSearch(testEntryHash, "factom");
 
         assertFalse(response.getData().toString().isEmpty());
     }

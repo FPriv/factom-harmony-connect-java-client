@@ -1,5 +1,5 @@
 
-# InlineResponse200Data
+# SearchResultData
 
 ## Properties
 Name | Type | Description | Notes

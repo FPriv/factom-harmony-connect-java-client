@@ -28,13 +28,13 @@ import java.io.IOException;
  * The search result. Includes an API link that allows you to retreive more information about the result. Also includes additional information based on the type of result reterned.
  */
 @ApiModel(description = "The search result. Includes an API link that allows you to retreive more information about the result. Also includes additional information based on the type of result reterned.")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-03T22:54:40.268681300Z[UTC]")
-public class InlineResponse200Data {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-19T17:03:47.709185+02:00[Europe/Berlin]")
+public class SearchResultData {
   public static final String SERIALIZED_NAME_HREF = "href";
   @SerializedName(SERIALIZED_NAME_HREF)
   private String href;
 
-  public InlineResponse200Data href(String href) {
+  public SearchResultData href(String href) {
     this.href = href;
     return this;
   }
@@ -61,8 +61,8 @@ public class InlineResponse200Data {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InlineResponse200Data inlineResponse200Data = (InlineResponse200Data) o;
-    return Objects.equals(this.href, inlineResponse200Data.href);
+    SearchResultData searchResultData = (SearchResultData) o;
+    return Objects.equals(this.href, searchResultData.href);
   }
 
   @Override
@@ -74,7 +74,7 @@ public class InlineResponse200Data {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InlineResponse200Data {\n");
+    sb.append("class SearchResultData {\n");
     sb.append("    href: ").append(toIndentedString(href)).append("\n");
     sb.append("}");
     return sb.toString();

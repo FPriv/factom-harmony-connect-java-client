@@ -133,7 +133,7 @@ Name | Type | Description  | Notes
 
 <a name="getSearch"></a>
 # **getSearch**
-> InlineResponse200 getSearch(term, allowedStages)
+> SearchResult getSearch(term, allowedStages)
 
 Search
 
@@ -166,7 +166,7 @@ ProofsApi apiInstance = new ProofsApi();
 String term = "term_example"; // String | The term that you are searching for. You may search for Directory Blocks (by height or key Merkle root), Entry Blocks (by key Merkle root), Factoid Blocks (by key Merkle root), Chains (by Chain ID), Entries (by Entry Hash), Addresses (by user address or address), and Transactions (by transaction ID).
 String allowedStages = "allowedStages_example"; // String | When entered, filters chain and entry responses by immutability stage. Must be either `replicated`, `factom`, or `anchored`.
 try {
-    InlineResponse200 result = apiInstance.getSearch(term, allowedStages);
+    SearchResult result = apiInstance.getSearch(term, allowedStages);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling ProofsApi#getSearch");
@@ -183,7 +183,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse200**](InlineResponse200.md)
+[**SearchResult**](SearchResult.md)
 
 ### Authorization
 
