@@ -29,7 +29,7 @@ import java.io.IOException;
 
 import harmony_connect_client.model.AnchorLong;
 import harmony_connect_client.model.ErrorMessage;
-import harmony_connect_client.model.InlineResponse200;
+import harmony_connect_client.model.SearchResult;
 import harmony_connect_client.model.ReceiptLong;
 
 import java.lang.reflect.Type;
@@ -372,11 +372,11 @@ public class ProofsApi {
      * Search for something on the Factom blockchain. You may search for Directory Blocks (by height or key Merkle root), Entry Blocks (by key Merkle root), Factoid Blocks (by key Merkle root), Chains (by Chain ID), Entries (by Entry Hash), Addresses (by user address or address), and Transactions (by transaction ID).
      * @param term The term that you are searching for. You may search for Directory Blocks (by height or key Merkle root), Entry Blocks (by key Merkle root), Factoid Blocks (by key Merkle root), Chains (by Chain ID), Entries (by Entry Hash), Addresses (by user address or address), and Transactions (by transaction ID). (optional)
      * @param allowedStages When entered, filters chain and entry responses by immutability stage. Must be either &#x60;replicated&#x60;, &#x60;factom&#x60;, or &#x60;anchored&#x60;. (optional)
-     * @return InlineResponse200
+     * @return SearchResult
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public InlineResponse200 getSearch(String term, String allowedStages) throws ApiException {
-        ApiResponse<InlineResponse200> resp = getSearchWithHttpInfo(term, allowedStages);
+    public SearchResult getSearch(String term, String allowedStages) throws ApiException {
+        ApiResponse<SearchResult> resp = getSearchWithHttpInfo(term, allowedStages);
         return resp.getData();
     }
 
@@ -385,12 +385,12 @@ public class ProofsApi {
      * Search for something on the Factom blockchain. You may search for Directory Blocks (by height or key Merkle root), Entry Blocks (by key Merkle root), Factoid Blocks (by key Merkle root), Chains (by Chain ID), Entries (by Entry Hash), Addresses (by user address or address), and Transactions (by transaction ID).
      * @param term The term that you are searching for. You may search for Directory Blocks (by height or key Merkle root), Entry Blocks (by key Merkle root), Factoid Blocks (by key Merkle root), Chains (by Chain ID), Entries (by Entry Hash), Addresses (by user address or address), and Transactions (by transaction ID). (optional)
      * @param allowedStages When entered, filters chain and entry responses by immutability stage. Must be either &#x60;replicated&#x60;, &#x60;factom&#x60;, or &#x60;anchored&#x60;. (optional)
-     * @return ApiResponse&lt;InlineResponse200&gt;
+     * @return ApiResponse&lt;SearchResult&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<InlineResponse200> getSearchWithHttpInfo(String term, String allowedStages) throws ApiException {
+    public ApiResponse<SearchResult> getSearchWithHttpInfo(String term, String allowedStages) throws ApiException {
         com.squareup.okhttp.Call call = getSearchValidateBeforeCall(term, allowedStages, null, null);
-        Type localVarReturnType = new TypeToken<InlineResponse200>(){}.getType();
+        Type localVarReturnType = new TypeToken<SearchResult>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -403,7 +403,7 @@ public class ProofsApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call getSearchAsync(String term, String allowedStages, final ApiCallback<InlineResponse200> callback) throws ApiException {
+    public com.squareup.okhttp.Call getSearchAsync(String term, String allowedStages, final ApiCallback<SearchResult> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -425,7 +425,7 @@ public class ProofsApi {
         }
 
         com.squareup.okhttp.Call call = getSearchValidateBeforeCall(term, allowedStages, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<InlineResponse200>(){}.getType();
+        Type localVarReturnType = new TypeToken<SearchResult>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }

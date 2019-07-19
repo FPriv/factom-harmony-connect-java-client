@@ -20,25 +20,25 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import harmony_connect_client.model.InlineResponse200Data;
+import harmony_connect_client.model.SearchResultData;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * InlineResponse200
+ * SearchResult
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-03T22:54:40.268681300Z[UTC]")
-public class InlineResponse200 {
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2019-07-19T17:03:47.709185+02:00[Europe/Berlin]")
+public class SearchResult {
   public static final String SERIALIZED_NAME_DATA = "data";
   @SerializedName(SERIALIZED_NAME_DATA)
-  private InlineResponse200Data data = null;
+  private SearchResultData data = null;
 
   public static final String SERIALIZED_NAME_TYPE = "type";
   @SerializedName(SERIALIZED_NAME_TYPE)
   private String type;
 
-  public InlineResponse200 data(InlineResponse200Data data) {
+  public SearchResult data(SearchResultData data) {
     this.data = data;
     return this;
   }
@@ -47,16 +47,16 @@ public class InlineResponse200 {
    * Get data
    * @return data
   **/
-  @ApiModelProperty(value = "")
-  public InlineResponse200Data getData() {
+  @ApiModelProperty(required = true, value = "")
+  public SearchResultData getData() {
     return data;
   }
 
-  public void setData(InlineResponse200Data data) {
+  public void setData(SearchResultData data) {
     this.data = data;
   }
 
-  public InlineResponse200 type(String type) {
+  public SearchResult type(String type) {
     this.type = type;
     return this;
   }
@@ -65,7 +65,7 @@ public class InlineResponse200 {
    * Tells you what type of result was found. Possible types include &#x60;directory_block&#x60;, &#x60;entry_block&#x60;, &#x60;factoid_block&#x60;, &#x60;chain&#x60;, &#x60;entry&#x60;, &#x60;address&#x60;, and &#x60;transaction&#x60;.
    * @return type
   **/
-  @ApiModelProperty(value = "Tells you what type of result was found. Possible types include `directory_block`, `entry_block`, `factoid_block`, `chain`, `entry`, `address`, and `transaction`.")
+  @ApiModelProperty(required = true, value = "Tells you what type of result was found. Possible types include `directory_block`, `entry_block`, `factoid_block`, `chain`, `entry`, `address`, and `transaction`.")
   public String getType() {
     return type;
   }
@@ -83,9 +83,9 @@ public class InlineResponse200 {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InlineResponse200 inlineResponse200 = (InlineResponse200) o;
-    return Objects.equals(this.data, inlineResponse200.data) &&
-        Objects.equals(this.type, inlineResponse200.type);
+    SearchResult searchResult = (SearchResult) o;
+    return Objects.equals(this.data, searchResult.data) &&
+        Objects.equals(this.type, searchResult.type);
   }
 
   @Override
@@ -97,7 +97,7 @@ public class InlineResponse200 {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class InlineResponse200 {\n");
+    sb.append("class SearchResult {\n");
     sb.append("    data: ").append(toIndentedString(data)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
